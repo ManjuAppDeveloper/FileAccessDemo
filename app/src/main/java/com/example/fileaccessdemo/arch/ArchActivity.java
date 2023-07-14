@@ -1,11 +1,15 @@
 package com.example.fileaccessdemo.arch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.databinding.library.baseAdapters.BuildConfig;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -45,7 +49,6 @@ public class ArchActivity extends AppCompatActivity {
         recyclerView.setAdapter(itemAdapter);
         itemViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
         itemViewModel.getItemsLiveData().observe(this, items -> itemAdapter.setItemsList(items));
-
         generatePdfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,56 +56,6 @@ public class ArchActivity extends AppCompatActivity {
             }
         });
     }
-
-  /*  private void generatePdf() {
-        PdfDocument pdfDocument = new PdfDocument();
-        int pageCount = itemAdapter.getItemCount();
-        int itemsPerPage = 20; // Number of items to display per page
-        int pageNumber = 1;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-            Uri uri = Uri.fromParts("package", getPackageName(), null);
-            intent.setData(uri);
-            startActivity(intent);
-            return;
-        }
-        for (int start = 0; start < pageCount; start += itemsPerPage) {
-            int end = Math.min(start + itemsPerPage, pageCount);
-
-            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, pageNumber).create();
-            PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
-            Canvas canvas = page.getCanvas();
-            Paint paint = new Paint();
-
-            canvas.drawColor(Color.WHITE); // Set background color
-            paint.setColor(Color.BLACK);
-            paint.setTextSize(12);
-
-            int y = 50;
-            List<Item> items = itemAdapter.getItems().subList(start, end);
-            for (Item item : items) {
-                canvas.drawText(item.getName(), 50, y, paint);
-                y += 30;
-            }
-
-            pdfDocument.finishPage(page);
-            pageNumber++;
-        }
-
-        File pdfFile = new File(Environment.getExternalStorageDirectory(), "RecyclerView.pdf");
-
-        try {
-            pdfDocument.writeTo(new FileOutputStream(pdfFile));
-            Toast.makeText(this, "PDF saved to " + pdfFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error generating PDF", Toast.LENGTH_SHORT).show();
-        }
-
-        pdfDocument.close();
-    }*/
   private void generatePdf() {
       PdfDocument pdfDocument = new PdfDocument();
       int pageCount = itemAdapter.getItemCount();
@@ -144,7 +97,6 @@ public class ArchActivity extends AppCompatActivity {
           if (end == pageCount) {
               break;
           }
-
           pageInfo = new PdfDocument.PageInfo.Builder(595, 842, pageNumber).create();
           page = pdfDocument.startPage(pageInfo);
           canvas = page.getCanvas();
@@ -158,23 +110,34 @@ public class ArchActivity extends AppCompatActivity {
       try {
           pdfDocument.writeTo(new FileOutputStream(pdfFile));
           Toast.makeText(this, "PDF saved to " + pdfFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+          sharePdfViaWhatsApp(pdfFile);
       } catch (IOException e) {
           e.printStackTrace();
           Toast.makeText(this, "Error generating PDF", Toast.LENGTH_SHORT).show();
       }
-
       pdfDocument.close();
   }
-  private int calculateItemsPerPage(PdfDocument.PageInfo pageInfo) {
-        int pageHeight = pageInfo.getPageHeight();
-        int availableHeight = pageHeight - 100; // Subtracting a margin
 
-        // Calculate the number of items that can fit in the available space
-        int itemHeight = 30; // Adjust this value based on your item layout
-        int itemsPerPage = availableHeight / itemHeight;
+    private void sharePdfViaWhatsApp(File pdfFile) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("application/pdf");
+        Uri pdfUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", pdfFile);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, pdfUri);
+        shareIntent.setPackage("com.whatsapp");
 
-        return itemsPerPage;
+        try {
+            startActivity(shareIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "WhatsApp is not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
-
+    private int calculateItemsPerPage(PdfDocument.PageInfo pageInfo) {
+        int pageHeight = pageInfo.getPageHeight();
+        int availableHeight = pageHeight - 100; // Subtracting a margin
+       // Calculate the number of items that can fit in the available space
+        int itemHeight = 30; // Adjust this value based on your item layout
+        int itemsPerPage = availableHeight / itemHeight;
+        return itemsPerPage;
+    }
 }

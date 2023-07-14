@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat;
 import com.example.fileaccessdemo.R;
 
 import java.util.function.BiFunction;
-
 public class LivenessActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     private Camera camera;
     private SurfaceView surfaceView;
@@ -36,7 +35,6 @@ public class LivenessActivity extends AppCompatActivity implements SurfaceHolder
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -48,13 +46,11 @@ public class LivenessActivity extends AppCompatActivity implements SurfaceHolder
             openCamera();
         }
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         releaseCamera();
     }
-
     private void openCamera() {
         try {
             camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
@@ -66,7 +62,6 @@ public class LivenessActivity extends AppCompatActivity implements SurfaceHolder
             e.printStackTrace();
         }
     }
-
     private void releaseCamera() {
         if (camera != null) {
             camera.stopPreview();
@@ -74,7 +69,6 @@ public class LivenessActivity extends AppCompatActivity implements SurfaceHolder
             camera = null;
         }
     }
-
     private void startIrisDetection() {
     }
     private void capturePhoto() {
