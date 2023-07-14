@@ -21,6 +21,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         this.itemsList = itemsList;
         notifyDataSetChanged();
     }
+    public List<Item> getItems() {
+        return itemsList;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

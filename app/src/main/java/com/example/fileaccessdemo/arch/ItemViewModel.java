@@ -12,14 +12,85 @@ public class ItemViewModel extends ViewModel {
     public LiveData<List<Item>> getItemsLiveData() {
         if (itemsLiveData == null) {
             itemsLiveData = new MutableLiveData<>();
-            loadItems(); // Fetch your data here and update the LiveData
+            loadItems();
         }
         return itemsLiveData;
     }
     private void loadItems() {
-        // Simulate data loading
         List<Item> items = new ArrayList<>();
-        items.add(new Item("Dhoni","Ranchi"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
+        items.add(new Item("Shewag","Delhi"));
+        items.add(new Item("Dravid","Bangalore"));
+        items.add(new Item("Dhoni","Jharkand"));
         items.add(new Item("Shewag","Delhi"));
         items.add(new Item("Dravid","Bangalore"));
         itemsLiveData.setValue(items);

@@ -76,10 +76,7 @@ public class LivenessActivity extends AppCompatActivity implements SurfaceHolder
     }
 
     private void startIrisDetection() {
-
     }
-
-
     private void capturePhoto() {
         camera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
