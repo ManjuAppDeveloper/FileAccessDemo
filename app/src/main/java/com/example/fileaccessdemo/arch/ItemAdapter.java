@@ -30,16 +30,18 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.nameTextView.setText(itemsList.get(position).getName());
+        holder.placeTextView.setText(itemsList.get(position).getPlace());
     }
     @Override
     public int getItemCount() {
         return itemsList.size();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView nameTextView;
+        private TextView nameTextView,placeTextView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
+            placeTextView = itemView.findViewById(R.id.placeTextView);
         }
     }
 }
