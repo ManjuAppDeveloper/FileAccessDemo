@@ -1,13 +1,5 @@
 package com.example.fileaccessdemo.arch;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-import androidx.databinding.library.baseAdapters.BuildConfig;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -24,6 +16,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+import androidx.databinding.library.baseAdapters.BuildConfig;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fileaccessdemo.R;
 
 import java.io.File;
@@ -31,7 +30,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 public class ArchActivity extends AppCompatActivity {
     private ItemViewModel itemViewModel;
     private RecyclerView recyclerView;
@@ -56,7 +56,16 @@ public class ArchActivity extends AppCompatActivity {
             }
         });
     }
-  private void generatePdf() {
+    private void drawCell(Canvas canvas, int x, int y, int width, int height, String text, Paint paint) {
+        // Draw cell border
+        canvas.drawRect(x, y, x + width, y + height, paint);
+        // Draw text in the center of the cell
+        float textWidth = paint.measureText(text);
+        float textX = x + (width - textWidth) / 2;
+        float textY = y + height / 2 - (paint.descent() + paint.ascent()) / 2;
+        canvas.drawText(text, textX, textY, paint);
+    }
+    private void generatePdf() {
       PdfDocument pdfDocument = new PdfDocument();
       int pageCount = itemAdapter.getItemCount();
       int pageNumber = 1;
@@ -82,14 +91,57 @@ public class ArchActivity extends AppCompatActivity {
       int start = 0;
       int end = Math.min(start + itemsPerPage, pageCount);
 
-      while (start < pageCount) {
+        // Load the image from the drawable folder
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.desktop);
+
+// Calculate the desired width and height of the image
+        int imageWidth = 80; // Adjust this value as needed
+        int imageHeight = 80; // Adjust this value as needed
+
+// Scale the image to fit within the desired dimensions
+        image = Bitmap.createScaledBitmap(image, imageWidth, imageHeight, false);
+
+
+        //===============
+        // Set up the paint for the heading
+        Paint headingPaint = new Paint();
+        headingPaint.setColor(Color.BLACK);
+        headingPaint.setTextSize(14);
+        headingPaint.setFakeBoldText(true);
+
+// Define the heading text
+        String headingText = "Your Heading";
+
+// Draw the image onto the canvas at the top center
+        int imageX = (pageInfo.getPageWidth() - image.getWidth()) / 2;
+        int imageY = 50; // Adjust the margin as needed
+        canvas.drawBitmap(image, imageX, imageY, paint);
+
+// Draw the heading text below the image and centered
+        float headingX = (pageInfo.getPageWidth() - headingPaint.measureText(headingText)) / 2;
+        float headingY = imageY + image.getHeight() + headingPaint.getTextSize() + 10; // Adjust the margin as needed
+        canvas.drawText(headingText, headingX, headingY, headingPaint);
+
+        // Draw a horizontal line below the heading
+        float lineStartX = 50;
+        float lineStartY = headingY + paint.getTextSize() + 10;
+        float lineEndX = pageInfo.getPageWidth() - 50;
+        float lineEndY = lineStartY;
+        paint.setColor(Color.BLUE);
+        paint.setStrokeWidth(2);
+        canvas.drawLine(lineStartX, lineStartY, lineEndX, lineEndY, paint);
+
+        // Adjust the y position to leave space for the image
+        y = (int) (lineEndY + 30);  // Adjust the spacing as needed
+
+        while (start < pageCount) {
           List<Item> items = itemAdapter.getItems().subList(start, end);
           for (Item item : items) {
               String name = item.getName();
               String place = item.getPlace();
-              canvas.drawText(name, 50, y, paint);
+              canvas.drawText(name, 60, y, paint);
               y += 30; // Move to the next line
-              canvas.drawText(place, 50, y, paint);
+              canvas.drawText(place, 60, y, paint);
               y += 30; // Move to the next line
           }
           pdfDocument.finishPage(page);
@@ -104,35 +156,17 @@ public class ArchActivity extends AppCompatActivity {
           start = end;
           end = Math.min(start + itemsPerPage, pageCount);
       }
-
       File pdfFile = new File(Environment.getExternalStorageDirectory(), "RecyclerView.pdf");
-
       try {
           pdfDocument.writeTo(new FileOutputStream(pdfFile));
           Toast.makeText(this, "PDF saved to " + pdfFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-          sharePdfViaWhatsApp(pdfFile);
       } catch (IOException e) {
           e.printStackTrace();
           Toast.makeText(this, "Error generating PDF", Toast.LENGTH_SHORT).show();
       }
       pdfDocument.close();
   }
-
-    private void sharePdfViaWhatsApp(File pdfFile) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("application/pdf");
-        Uri pdfUri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", pdfFile);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, pdfUri);
-        shareIntent.setPackage("com.whatsapp");
-
-        try {
-            startActivity(shareIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "WhatsApp is not installed", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private int calculateItemsPerPage(PdfDocument.PageInfo pageInfo) {
+  private int calculateItemsPerPage(PdfDocument.PageInfo pageInfo) {
         int pageHeight = pageInfo.getPageHeight();
         int availableHeight = pageHeight - 100; // Subtracting a margin
        // Calculate the number of items that can fit in the available space
