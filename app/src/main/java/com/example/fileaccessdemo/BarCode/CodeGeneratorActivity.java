@@ -49,10 +49,8 @@ public class CodeGeneratorActivity extends AppCompatActivity {
         try {
             Map<EncodeHintType, Object> hints = new HashMap<>();
             hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-
             QRCodeWriter writer = new QRCodeWriter();
             BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, width, height, hints);
-
             int[] pixels = new int[width * height];
             for (int y = 0; y < height; y++) {
                 int offset = y * width;
@@ -68,7 +66,6 @@ public class CodeGeneratorActivity extends AppCompatActivity {
             return null;
         }
     }
-
     private String encodeDataItem(DataItem item) {
         StringBuilder builder = new StringBuilder();
         builder.append("Name: ").append(item.getName()).append("\n");
