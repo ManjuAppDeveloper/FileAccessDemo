@@ -56,15 +56,6 @@ public class ArchActivity extends AppCompatActivity {
             }
         });
     }
-    private void drawCell(Canvas canvas, int x, int y, int width, int height, String text, Paint paint) {
-        // Draw cell border
-        canvas.drawRect(x, y, x + width, y + height, paint);
-        // Draw text in the center of the cell
-        float textWidth = paint.measureText(text);
-        float textX = x + (width - textWidth) / 2;
-        float textY = y + height / 2 - (paint.descent() + paint.ascent()) / 2;
-        canvas.drawText(text, textX, textY, paint);
-    }
     private void generatePdf() {
       PdfDocument pdfDocument = new PdfDocument();
       int pageCount = itemAdapter.getItemCount();

@@ -20,7 +20,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.fileaccessdemo"
-        minSdk 21
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -52,9 +52,10 @@ android {
         implementation 'com.google.android.material:material:1.4.0'
         implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
         implementation "androidx.biometric:biometric:1.1.0"
-
-// RecyclerView
         implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+        implementation 'com.google.zxing:core:3.4.1'
+        implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
 
 
     }
