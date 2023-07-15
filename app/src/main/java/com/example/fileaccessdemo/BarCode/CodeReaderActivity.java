@@ -17,15 +17,12 @@ import com.google.zxing.integration.android.IntentResult;
 public class CodeReaderActivity extends AppCompatActivity {
     private Button scanButton;
     private TextView resultTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code_reader);
-
         scanButton = findViewById(R.id.scanButton);
         resultTextView = findViewById(R.id.resultTextView);
-
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +38,6 @@ public class CodeReaderActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Retrieve scan result
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
