@@ -117,10 +117,8 @@ public class ArchActivity extends AppCompatActivity {
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(2);
         canvas.drawLine(lineStartX, lineStartY, lineEndX, lineEndY, paint);
-
         // Adjust the y position to leave space for the image
         y = (int) (lineEndY + 30);  // Adjust the spacing as needed
-
         while (start < pageCount) {
           List<Item> items = itemAdapter.getItems().subList(start, end);
           for (Item item : items) {
@@ -154,17 +152,13 @@ public class ArchActivity extends AppCompatActivity {
       }
       pdfDocument.close();
   }
-
     private void printPdf(File pdfFile) {
         // Create a PrintDocumentAdapter
         PrintDocumentAdapter documentAdapter = new PdfDocumentAdapter(this, pdfFile);
-
         // Get the PrintManager system service
         PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
-
         // Set the job name
         String jobName = getString(R.string.app_name) + " Document";
-
         // Start the print job
         printManager.print(jobName, documentAdapter, null);
     }

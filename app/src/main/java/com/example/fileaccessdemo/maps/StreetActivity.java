@@ -34,15 +34,12 @@ public class StreetActivity extends FragmentActivity implements OnMapReadyCallba
     private LocationCallback locationCallback;
     private ArrayList<LatLng> locationArrayList;
     private Circle currentLocationCircle;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
         locationArrayList = new ArrayList<>();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -124,7 +121,6 @@ public class StreetActivity extends FragmentActivity implements OnMapReadyCallba
             currentLocationCircle.setRadius(10);
         }
     }
-
     private void startLocationCapture() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, null);
@@ -132,7 +128,6 @@ public class StreetActivity extends FragmentActivity implements OnMapReadyCallba
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
