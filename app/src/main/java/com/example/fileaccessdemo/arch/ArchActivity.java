@@ -2,6 +2,7 @@ package com.example.fileaccessdemo.arch;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,6 +12,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
@@ -48,7 +51,7 @@ public class ArchActivity extends AppCompatActivity {
         itemAdapter = new ItemAdapter(new ArrayList<>());
         recyclerView.setAdapter(itemAdapter);
         itemViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
-        itemViewModel.getItemsLiveData().observe(this, items -> itemAdapter.setItemsList(items));
+        itemViewModel.getItemsLiveData().observe(this, item -> itemAdapter.setItemsList(item));
         generatePdfButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +63,6 @@ public class ArchActivity extends AppCompatActivity {
       PdfDocument pdfDocument = new PdfDocument();
       int pageCount = itemAdapter.getItemCount();
       int pageNumber = 1;
-
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
           Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
           Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -68,20 +70,16 @@ public class ArchActivity extends AppCompatActivity {
           startActivity(intent);
           return;
       }
-
       PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, pageNumber).create();
       PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
       Canvas canvas = page.getCanvas();
       Paint paint = new Paint();
       paint.setColor(Color.BLACK);
       paint.setTextSize(12);
-
       int y = 50;
       int itemsPerPage = calculateItemsPerPage(pageInfo);
       int start = 0;
       int end = Math.min(start + itemsPerPage, pageCount);
-
         // Load the image from the drawable folder
         Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.desktop);
 
@@ -91,8 +89,6 @@ public class ArchActivity extends AppCompatActivity {
 
 // Scale the image to fit within the desired dimensions
         image = Bitmap.createScaledBitmap(image, imageWidth, imageHeight, false);
-
-
         //===============
         // Set up the paint for the heading
         Paint headingPaint = new Paint();
@@ -150,6 +146,7 @@ public class ArchActivity extends AppCompatActivity {
       File pdfFile = new File(Environment.getExternalStorageDirectory(), "RecyclerView.pdf");
       try {
           pdfDocument.writeTo(new FileOutputStream(pdfFile));
+          printPdf(pdfFile);
           Toast.makeText(this, "PDF saved to " + pdfFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
       } catch (IOException e) {
           e.printStackTrace();
@@ -157,7 +154,21 @@ public class ArchActivity extends AppCompatActivity {
       }
       pdfDocument.close();
   }
-  private int calculateItemsPerPage(PdfDocument.PageInfo pageInfo) {
+
+    private void printPdf(File pdfFile) {
+        // Create a PrintDocumentAdapter
+        PrintDocumentAdapter documentAdapter = new PdfDocumentAdapter(this, pdfFile);
+
+        // Get the PrintManager system service
+        PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+
+        // Set the job name
+        String jobName = getString(R.string.app_name) + " Document";
+
+        // Start the print job
+        printManager.print(jobName, documentAdapter, null);
+    }
+    private int calculateItemsPerPage(PdfDocument.PageInfo pageInfo) {
         int pageHeight = pageInfo.getPageHeight();
         int availableHeight = pageHeight - 100; // Subtracting a margin
        // Calculate the number of items that can fit in the available space

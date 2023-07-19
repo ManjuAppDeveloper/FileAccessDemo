@@ -1,5 +1,4 @@
 package com.example.fileaccessdemo.BarCode;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fileaccessdemo.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 public class CodeReaderActivity extends AppCompatActivity {
     private Button scanButton;
     private TextView resultTextView;

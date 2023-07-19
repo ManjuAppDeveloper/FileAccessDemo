@@ -14,3 +14,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "FileAccessDemo"
 include ':app'
+include ':OpenCV'
+

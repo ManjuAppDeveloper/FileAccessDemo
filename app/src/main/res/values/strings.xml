@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FileAccessDemo</string>
+    <string name="default_notification_channel_id">channel_id</string>
+
 </resources>

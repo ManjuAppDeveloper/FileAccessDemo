@@ -27,13 +27,11 @@ public class CodeGeneratorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code_generator);
         ImageView barcodeImageView = findViewById(R.id.barcodeImageView);
-
         // Create a list of DataItem objects
         List<DataItem> dataItems = new ArrayList<>();
         dataItems.add(createDataItem("John Doe", 35, true));
         int width = 400;
         int height = 400;
-
         // Generate and display barcode for each data item
         for (DataItem item : dataItems) {
             String barcodeData = encodeDataItem(item);
